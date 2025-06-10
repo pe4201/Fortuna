@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giro da Fortuna</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎯 Bem-vindo, <span id="usuarioNome"></span>!</h1>
+    <p>Escolha seu pacote e tente a sorte na roleta!</p>
+
+    <div class="pacotes">
+      <button onclick="comprarGiros(3, 'https://pay.segurocompra.com/checkout/6e733388-95c3-4cf0-9aa1-680b42c6f068')">3 Giros - R$8,00</button>
+      <button onclick="comprarGiros(8, 'https://pay.segurocompra.com/checkout/2c16f2e0-5281-4fa9-a240-69a59870af3d')">8 Giros - R$19,99</button>
+      <button onclick="comprarGiros(20, 'https://pay.segurocompra.com/checkout/e0423f8e-986c-4166-9726-a773aceaf1a5')">20 Giros - R$49,99</button>
+    </div>
+
+    <div id="girosRestantes" style="margin: 20px 0; font-weight: bold;"></div>
+
+    <img src="roleta.png" alt="Roleta da Fortuna" id="roletaImg" style="max-width: 300px;">
+
+    <button id="girarBtn" onclick="girarRoleta()" style="display: none;">🎰 Girar Agora</button>
+    <div id="resultado"></div>
+  </div>
+
+  <script>
+    const nome = localStorage.getItem('usuario_nome');
+    document.getElementById('usuarioNome').innerText = nome || 'Jogador';
+
+    let giros = localStorage.getItem('giros_disponiveis') || 0;
+    atualizarContador();
+
+    function comprarGiros(qtd, link) {
+      window.open(link, '_blank');
+      alert('Após o pagamento, clique em OK para liberar seus giros.');
+      giros = parseInt(giros) + qtd;
+      localStorage.setItem('giros_disponiveis', giros);
+      atualizarContador();
+    }
+
+    function atualizarContador() {
+      document.getElementById('girosRestantes').innerText = `Giros disponíveis: ${giros}`;
+      document.getElementById('girarBtn').style.display = giros > 0 ? 'inline-block' : 'none';
+    }
+
+    function girarRoleta() {
+      if (giros <= 0) return alert('Você não tem giros. Compre mais para continuar!');
+
+      const premiar = Math.random() < 0.01;
+
+      const premios_ruins = [
+        'Nada 😢', 'Bilhete', 'Tente novamente', 'R$2', 'Nada 😔', 'Quase lá'
+      ];
+
+      const premios_bons = [
+        'R$50', 'R$100', 'R$200', 'R$500', 'Bilhete Dourado'
+      ];
+
+      const resultado = premiar
+        ? premios_bons[Math.floor(Math.random() * premios_bons.length)]
+        : premios_ruins[Math.floor(Math.random() * premios_ruins.length)];
+
+      document.getElementById('resultado').innerText = `Você ganhou: ${resultado}`;
+
+      giros--;
+      localStorage.setItem('giros_disponiveis', giros);
+      atualizarContador();
+    }
+  </script>
+</body>
+</html>

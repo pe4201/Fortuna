@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giro da Fortuna - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>🎰 Giro da Fortuna</h1>
+    <p>Entre com seu nome e e-mail para jogar</p>
+
+    <form id="loginForm">
+      <input type="text" id="nome" placeholder="Seu nome" required>
+      <input type="email" id="email" placeholder="Seu e-mail" required>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById('nome').value;
+      const email = document.getElementById('email').value;
+
+      if (nome && email) {
+        localStorage.setItem('usuario_nome', nome);
+        localStorage.setItem('usuario_email', email);
+        window.location.href = 'roleta.html';
+      }
+    });
+  </script>
+</body>
+</html>
